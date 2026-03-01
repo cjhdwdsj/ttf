@@ -66,15 +66,16 @@ const App = {
     }
 
     function doPull10() {
-      if (tickets.value < 10) return;
-      const banner  = getBanner(activeBannerId.value);
+      const banner = getBanner(activeBannerId.value);
+      const totalCost = banner.cost * 10;
+      if (tickets.value < totalCost) return;
       const pity    = getPity(banner.id);
       const results = tenPull(banner, pity);
       const updated = updatePity(pity, results);
       Object.assign(pity, updated);
       savePity(banner.id, pity);
 
-      tickets.value -= banner.cost * 10;
+      tickets.value -= totalCost;
       saveTickets(tickets.value);
 
       recordResults(results);
