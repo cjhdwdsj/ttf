@@ -2,7 +2,7 @@
 // Uses Composition API + CDN Vue (no build step required)
 
 import BannerView  from './components/BannerView.js';
-import PullResult  from './components/PullResult.js';
+import DrawAnimation from './components/DrawAnimation.js';
 import HistoryView from './components/HistoryView.js';
 import StatsView   from './components/StatsView.js';
 
@@ -17,7 +17,7 @@ import {
 const { createApp, ref, computed, reactive } = Vue;
 
 const App = {
-  components: { BannerView, PullResult, HistoryView, StatsView },
+  components: { BannerView, DrawAnimation, HistoryView, StatsView },
 
   setup() {
     // ── Persistent state ──────────────────────────────────────────
@@ -153,8 +153,8 @@ const App = {
         />
       </main>
 
-      <!-- Pull result overlay -->
-      <PullResult
+      <!-- Pull / draw animation overlay -->
+      <DrawAnimation
         v-if="pullResults"
         :results="pullResults"
         @close="closePullResult"
