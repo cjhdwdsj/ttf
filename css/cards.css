@@ -1,0 +1,219 @@
+/* ── cards.css ─ pull overlay, card flip animation ─────────────────── */
+
+/* ─ Overlay ───────────────────────────────────────────────────────── */
+.pull-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0,0,0,.88);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* ─ Card grid ─────────────────────────────────────────────────────── */
+.pull-result-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  max-width: 700px;
+  width: 100%;
+}
+.pull-result-container.single {
+  grid-template-columns: 1fr;
+  max-width: 240px;
+}
+
+/* ─ Individual card ───────────────────────────────────────────────── */
+.result-card {
+  aspect-ratio: 2/3;
+  perspective: 900px;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Inner wrapper — this is what flips */
+.result-card .card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: transform .6s cubic-bezier(.4,0,.2,1);
+}
+
+/* Back face starts at 0°, front face starts at 180° (hidden) */
+.result-card .card-back  { transform: rotateY(0deg);   }
+.result-card .card-front { transform: rotateY(180deg);  }
+
+/* When revealed: back flips to -180°, front flips to 0° (visible) */
+.result-card.revealed .card-back  { transform: rotateY(-180deg); }
+.result-card.revealed .card-front { transform: rotateY(0deg);    }
+
+/* ─ Card back design ─────────────────────────────────────────────── */
+.card-back {
+  background: linear-gradient(145deg, #0d1b2e 0%, #1a2f4e 100%);
+  border: 1px solid rgba(96,165,250,.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.card-back-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255,255,255,.03) 0px, rgba(255,255,255,.03) 1px, transparent 1px, transparent 12px),
+    repeating-linear-gradient(-45deg, rgba(255,255,255,.03) 0px, rgba(255,255,255,.03) 1px, transparent 1px, transparent 12px);
+}
+.card-back-logo { font-size: 2rem; opacity: .25; position: relative; }
+
+/* ─ Card front design ─────────────────────────────────────────────── */
+.card-front {
+  border: 2px solid var(--rarity-color, #94A3B8);
+  box-shadow: 0 0 20px var(--rarity-glow, transparent), inset 0 0 30px rgba(0,0,0,.5);
+  background: linear-gradient(160deg, #0f1a2e 0%, #1a2840 60%, #0a1020 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 10px 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Holographic shine sweep */
+.card-shine {
+  position: absolute;
+  top: -50%; left: -60%;
+  width: 60%; height: 200%;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.08) 50%, transparent 60%);
+  transform: skewX(-15deg);
+  pointer-events: none;
+}
+.result-card.revealed .card-shine {
+  animation: shine-sweep .8s .3s ease forwards;
+}
+@keyframes shine-sweep {
+  from { left: -60%; }
+  to   { left: 120%;  }
+}
+
+/* Legendary burst */
+.result-card.legendary.revealed .card-front {
+  animation: legendary-burst .5s .25s ease both;
+}
+@keyframes legendary-burst {
+  0%   { box-shadow: 0 0 20px var(--rarity-glow); }
+  50%  { box-shadow: 0 0 60px var(--rarity-glow), 0 0 100px var(--rarity-glow); }
+  100% { box-shadow: 0 0 20px var(--rarity-glow); }
+}
+
+/* ─ Card front content ────────────────────────────────────────────── */
+.featured-badge {
+  position: absolute;
+  top: 6px; right: 6px;
+  font-size: .55rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #000;
+  padding: 2px 5px;
+  border-radius: 4px;
+  letter-spacing: .03em;
+}
+
+.card-rarity-stars {
+  color: var(--rarity-color);
+  font-size: .65rem;
+  letter-spacing: -1px;
+  text-shadow: 0 0 6px var(--rarity-glow);
+}
+
+.card-pos-badge {
+  font-size: .65rem;
+  font-weight: 800;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: .06em;
+}
+
+.card-player-name {
+  font-size: .85rem;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.2;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255,255,255,.3);
+}
+
+.card-player-sub {
+  font-size: .6rem;
+  color: rgba(255,255,255,.5);
+  text-align: center;
+}
+
+.card-ovr {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--rarity-color);
+  text-shadow: 0 0 12px var(--rarity-glow);
+  line-height: 1;
+  margin: 2px 0;
+}
+
+.card-nation {
+  font-size: .62rem;
+  color: rgba(255,255,255,.45);
+}
+
+.card-rarity-label {
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  margin-top: 2px;
+}
+
+/* ─ Single card is bigger ─────────────────────────────────────────── */
+.pull-result-container.single .result-card { aspect-ratio: 2/3; }
+.pull-result-container.single .card-player-name { font-size: 1.1rem; }
+.pull-result-container.single .card-ovr         { font-size: 2rem; }
+
+/* ─ Controls & hint ───────────────────────────────────────────────── */
+.pull-controls { display: flex; gap: 12px; }
+
+.ctrl-btn {
+  padding: 10px 32px;
+  border-radius: 8px;
+  font-size: .95rem;
+  font-weight: 600;
+  background: var(--clr-surface2);
+  border: 1px solid var(--clr-border);
+  color: var(--clr-text);
+  transition: all .15s;
+}
+.ctrl-btn:hover         { background: var(--clr-accent); border-color: var(--clr-accent); color: #fff; }
+.ctrl-btn.confirm-btn   { background: linear-gradient(135deg, #1d4ed8, #4f46e5); border-color: transparent; color: #fff; }
+.ctrl-btn.confirm-btn:hover { filter: brightness(1.1); }
+
+.pull-hint { font-size: .8rem; color: rgba(255,255,255,.4); text-align: center; }
+
+/* ─ Responsive ────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .pull-result-container {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+  .card-player-name { font-size: .72rem !important; }
+  .card-ovr         { font-size: 1.1rem !important; }
+  .pull-result-container.single {
+    max-width: 200px;
+  }
+}

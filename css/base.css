@@ -1,0 +1,66 @@
+/* ── base.css ─ reset, fonts, CSS custom properties ─────────────── */
+
+/* Font files live at the repository root (one level above css/) */
+@font-face {
+  font-family: 'HarmonyOS';
+  src: url('../HarmonyOS_Sans_SC_Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'OPPOSans';
+  src: url('../OPPOSans-M.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Palette */
+  --clr-bg:         #0a0e1a;
+  --clr-surface:    #111827;
+  --clr-surface2:   #1c2535;
+  --clr-border:     #2a3650;
+  --clr-text:       #e2e8f0;
+  --clr-text-dim:   #7a8fa8;
+  --clr-accent:     #3b82f6;
+
+  /* Rarity colours */
+  --clr-legendary:  #FFD700;
+  --clr-epic:       #C084FC;
+  --clr-rare:       #60A5FA;
+  --clr-normal:     #94A3B8;
+
+  /* Layout */
+  --radius:         10px;
+  --radius-lg:      16px;
+  --shadow-card:    0 4px 24px rgba(0,0,0,.6);
+
+  /* Fonts */
+  font-family: 'HarmonyOS', 'OPPOSans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size:   16px;
+  line-height: 1.5;
+  color:       var(--clr-text);
+}
+
+html, body {
+  min-height: 100dvh;
+  background: var(--clr-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+img { display: block; }
+
+::-webkit-scrollbar            { width: 5px; height: 5px; }
+::-webkit-scrollbar-track      { background: transparent; }
+::-webkit-scrollbar-thumb      { background: var(--clr-border); border-radius: 99px; }
