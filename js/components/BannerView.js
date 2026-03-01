@@ -33,7 +33,12 @@ export default defineComponent({
 
     function pityProgress() {
       const hard = activeBanner.value.pity.hard;
-      return Math.round((pity.value.count / hard) * 100);
+      // Defensively handle invalid or zero `hard` values and clamp percentage to [0, 100]
+      if (!Number.isFinite(hard) || hard <= 0) {
+        return 0;
+      }
+      const rawPercent = Math.round((pity.value.count / hard) * 100);
+      return Math.max(0, Math.min(100, rawPercent));
     }
 
     return { banners, activeBanner, pity, featuredPlayers, rarityMeta, pityProgress, RARITY_META };
