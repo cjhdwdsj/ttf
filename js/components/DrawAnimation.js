@@ -116,9 +116,15 @@ export default defineComponent({
     function skip() {
       clearTimers();
       if (phase.value < 4) {
+        // Briefly show explosion (phase 3) so built particles are visible,
+        // then fast-forward to card reveal (phase 4).
+        phase.value = 3;
         buildParticles();
-        phase.value = 4;
         if (isLegendary.value) buildRain();
+        // Allow a short explosion window before revealing cards.
+        sched(() => {
+          phase.value = 4;
+        }, 400);
         sched(() => { emit('close'); }, 9000);
       } else {
         emit('close');
