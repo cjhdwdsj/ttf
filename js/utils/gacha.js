@@ -1,7 +1,7 @@
 // Gacha pull logic
 // Pure functions — no side effects, easy to unit-test.
 
-import { PLAYERS, byRarity, featuredLegendaries } from '../data/players.js';
+import { PLAYERS, byRarity } from '../data/players.js';
 
 /**
  * Weighted random pick from an array.
