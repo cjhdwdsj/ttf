@@ -30,7 +30,7 @@ function pickFrom(players) {
  * @param {object} banner   - Banner config from banners.js
  * @param {object} pityState - { count: number, epicStreak: number }
  * @param {boolean} forceEpicPlus - force at least epic (for 10× guarantee)
- * @returns {{ player, isNew: false }}
+ * @returns {{ player: *, tier: string, featured: boolean }}
  */
 export function singlePull(banner, pityState, forceEpicPlus = false) {
   const { rates, pity } = banner;
