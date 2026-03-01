@@ -102,14 +102,14 @@ export default defineComponent({
 
         <!-- Pull buttons -->
         <div class="pull-buttons">
-          <button class="pull-btn pull1" @click="$emit('pull1')" :disabled="tickets < 1">
+          <button class="pull-btn pull1" @click="$emit('pull1')" :disabled="tickets < activeBanner.cost">
             <span class="pull-btn-icon">⚽</span>
             <span class="pull-btn-label">单抽 × 1</span>
             <span class="pull-btn-cost">
               <img src="img/ticket.svg" class="ticket-icon" alt="" aria-hidden="true"/> × {{ activeBanner.cost }}
             </span>
           </button>
-          <button class="pull-btn pull10" @click="$emit('pull10')" :disabled="tickets < 10">
+          <button class="pull-btn pull10" @click="$emit('pull10')" :disabled="tickets < activeBanner.cost * 10">
             <span class="pull-btn-icon">🌟</span>
             <span class="pull-btn-label">十连抽 × 10</span>
             <span class="pull-btn-cost">
