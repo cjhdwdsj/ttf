@@ -1,0 +1,554 @@
+/* ── draw-animation.css ─ 3D gacha draw animation ──────────────────── */
+
+/* ─ Root container ───────────────────────────────────────────────────── */
+.da-root {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #000;
+  overflow: hidden;
+  font-family: inherit;
+  --tc: #FFD700;
+  --tg: #FFA500;
+}
+
+/* ─ Shared fade-in ────────────────────────────────────────────────────── */
+@keyframes da-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ─ Stadium sky / background ──────────────────────────────────────────── */
+.da-sky {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, #1a3566 0%, #0c1a36 40%, #020810 100%);
+  animation: da-fade-in .8s ease forwards;
+}
+
+/* Crowd / stands texture in upper portion */
+.da-crowd {
+  position: absolute;
+  inset: 0 0 45% 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(20,45,90,.5) 0px,
+      rgba(20,45,90,.5) 3px,
+      rgba(15,35,70,.4) 3px,
+      rgba(15,35,70,.4) 12px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(30,60,100,.35) 0px,
+      rgba(30,60,100,.35) 8px,
+      rgba(20,45,80,.25) 8px,
+      rgba(20,45,80,.25) 18px
+    );
+  animation: da-fade-in 1s .2s ease both;
+}
+
+/* ─ 3D Football Field ────────────────────────────────────────────────── */
+.da-field-wrap {
+  position: absolute;
+  bottom: -8%;
+  left: -35%;
+  right: -35%;
+  height: 68%;
+  perspective: 580px;
+  perspective-origin: 50% 0%;
+}
+
+.da-field {
+  position: absolute;
+  inset: 0;
+  transform: rotateX(63deg);
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  animation: da-field-zoom-in 1.1s .35s cubic-bezier(.22,1,.36,1) both;
+  background:
+    repeating-linear-gradient(
+      to right,
+      rgba(0,0,0,.07) 0%,
+      rgba(0,0,0,.07) 10%,
+      rgba(255,255,255,.03) 10%,
+      rgba(255,255,255,.03) 20%
+    ),
+    linear-gradient(160deg, #1a7020 0%, #22902a 50%, #1a7020 100%);
+  border: 2px solid rgba(255,255,255,.28);
+  border-radius: 4px;
+}
+
+@keyframes da-field-zoom-in {
+  from { opacity: 0; transform: rotateX(63deg) scale(.35) translateY(20%); }
+  to   { opacity: 1; transform: rotateX(63deg) scale(1)   translateY(0); }
+}
+
+/* Center circle */
+.da-field-center-circle {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24%; aspect-ratio: 1;
+  border: 2px solid rgba(255,255,255,.52);
+  border-radius: 50%;
+}
+.da-field-center-circle::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 7px; height: 7px;
+  background: rgba(255,255,255,.7);
+  border-radius: 50%;
+}
+
+/* Halfway line */
+.da-field-halfway {
+  position: absolute;
+  top: 0; bottom: 0; left: 50%;
+  width: 2px;
+  background: rgba(255,255,255,.42);
+  transform: translateX(-50%);
+}
+
+/* Penalty boxes */
+.da-field-penalty {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  width: 18%; height: 52%;
+  border: 2px solid rgba(255,255,255,.4);
+}
+.da-penalty-l { left: 0;  border-left: none; }
+.da-penalty-r { right: 0; border-right: none; }
+
+/* ─ Stadium Lights / Beams ─────────────────────────────────────────── */
+.da-lights {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Corner spotlight halos */
+.da-lights::before,
+.da-lights::after {
+  content: '';
+  position: absolute;
+  top: -30px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  filter: blur(75px);
+  opacity: .2;
+  animation: da-halo-pulse 4s ease-in-out infinite;
+}
+.da-lights::before { left:  4%; background: #fff8d4; }
+.da-lights::after  { right: 4%; background: #fff8d4; animation-delay: 1.8s; }
+
+@keyframes da-halo-pulse {
+  0%, 100% { opacity: .15; transform: scale(1); }
+  50%       { opacity: .30; transform: scale(1.1); }
+}
+
+/* Light beams from top */
+.da-beam {
+  position: absolute;
+  width: 3px;
+  background: linear-gradient(to bottom, rgba(255,255,230,.32) 0%, transparent 100%);
+  transform-origin: top center;
+  animation: da-fade-in .6s ease both;
+}
+.da-beam-1 { top: 0; left:  7%; height: 44%; transform: rotate(-20deg); animation-delay: .5s; }
+.da-beam-2 { top: 0; right: 7%; height: 44%; transform: rotate( 20deg); animation-delay: .65s; }
+.da-beam-3 { top: 0; left: 28%; height: 38%; transform: rotate( -8deg); animation-delay: .8s; }
+.da-beam-4 { top: 0; right:28%; height: 38%; transform: rotate(  8deg); animation-delay: .95s; }
+
+/* ─ Ball ──────────────────────────────────────────────────────────── */
+.da-ball-wrap {
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  width: 80px; height: 80px;
+  transform: translate(-50%, -50%) scale(.45);
+  opacity: 0;
+  transition: top 1.6s cubic-bezier(.4,0,.2,1),
+              transform 1.6s cubic-bezier(.4,0,.2,1),
+              opacity .5s ease;
+}
+
+.da-ball {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 32%, #fff 0%, #ddd 28%, #999 65%, #444 100%);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,.7);
+  transition: box-shadow .8s ease;
+}
+
+/* Hex/pentagon pattern */
+.da-ball-pattern {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background-image:
+    radial-gradient(circle, rgba(0,0,0,.68) 32%, transparent 33%) 0 0 / 22px 22px,
+    radial-gradient(circle, rgba(0,0,0,.68) 32%, transparent 33%) 11px 11px / 22px 22px;
+  opacity: .4;
+}
+.da-ball-pattern.da-spin {
+  animation: da-ball-spin 1.4s linear infinite;
+}
+@keyframes da-ball-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Specular shine */
+.da-ball-shine {
+  position: absolute;
+  top: 7%; left: 14%;
+  width: 38%; height: 28%;
+  background: radial-gradient(ellipse, rgba(255,255,255,.72) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+/* Ball shadow on ground */
+.da-ball-shadow {
+  position: absolute;
+  bottom: -6px; left: 50%;
+  transform: translateX(-50%);
+  width: 56px; height: 14px;
+  background: rgba(0,0,0,.55);
+  border-radius: 50%;
+  filter: blur(5px);
+  transition: opacity .5s, transform .5s;
+}
+
+/* Energy rings */
+.da-energy-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid var(--tc);
+  box-shadow: 0 0 8px var(--tg);
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+}
+.da-er-1 { width:  86px; height:  86px; }
+.da-er-2 { width: 118px; height: 118px; }
+.da-er-3 { width: 158px; height: 158px; }
+
+/* ─ Phase states ──────────────────────────────────────────────────── */
+
+/* Phase 1: ball appears at field level */
+.da-phase-1 .da-ball-wrap,
+.da-phase-2 .da-ball-wrap,
+.da-phase-3 .da-ball-wrap {
+  opacity: 1;
+}
+.da-phase-1 .da-ball-wrap { top: 58%; transform: translate(-50%, -50%) scale(.65); }
+
+/* Phase 2: ball rises toward camera, charges */
+.da-phase-2 .da-ball-wrap { top: 46%; transform: translate(-50%, -50%) scale(1.5); }
+.da-phase-2 .da-ball      { box-shadow: 0 0 35px var(--tc), 0 0 70px var(--tg); animation: da-glow-pulse 1.3s ease-in-out infinite; }
+.da-phase-2 .da-ball-shadow { opacity: .3; transform: translateX(-50%) scaleX(2); }
+
+@keyframes da-glow-pulse {
+  0%, 100% { box-shadow: 0 0 25px var(--tc), 0 0 55px var(--tg); }
+  50%       { box-shadow: 0 0 65px var(--tc), 0 0 120px var(--tg), 0 0 180px var(--tg); }
+}
+
+/* Phase 2: energy rings pulse outward */
+.da-phase-2 .da-er-1 { animation: da-ring-out 1.3s .00s ease-out infinite; }
+.da-phase-2 .da-er-2 { animation: da-ring-out 1.3s .22s ease-out infinite; }
+.da-phase-2 .da-er-3 { animation: da-ring-out 1.3s .44s ease-out infinite; }
+
+@keyframes da-ring-out {
+  0%   { opacity: .9; transform: translate(-50%, -50%) scale(.4); }
+  100% { opacity: 0;  transform: translate(-50%, -50%) scale(1.6); }
+}
+
+/* Phase 3: ball explodes outward */
+.da-phase-3 .da-ball-wrap {
+  top: 46%;
+  transform: translate(-50%, -50%) scale(5);
+  opacity: 0;
+  transition: top .01s, transform .45s cubic-bezier(.6,.04,.98,.34), opacity .45s;
+}
+
+/* ─ Tier label (epic / legendary announcement) ───────────────────── */
+.da-tier-label {
+  position: absolute;
+  top: 16%; left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: var(--tc);
+  text-shadow: 0 0 20px var(--tg), 0 0 45px var(--tg);
+  letter-spacing: .15em;
+  white-space: nowrap;
+  animation: da-label-appear .55s cubic-bezier(.175,.885,.32,1.275) both,
+             da-label-glow 2.2s 1s ease-in-out infinite;
+}
+
+@keyframes da-label-appear {
+  from { opacity: 0; transform: translateX(-50%) scale(.5) translateY(10px); }
+  to   { opacity: 1; transform: translateX(-50%) scale(1)  translateY(0); }
+}
+@keyframes da-label-glow {
+  0%, 100% { text-shadow: 0 0 20px var(--tg), 0 0 40px var(--tg); }
+  50%       { text-shadow: 0 0 40px var(--tg), 0 0 90px var(--tg), 0 0 150px var(--tg); }
+}
+
+/* ─ Legendary: camera shake on phase 2 ──────────────────────────── */
+.da-tier-legendary.da-phase-2 .da-stadium {
+  animation: da-cam-shake .12s ease-in-out 0s 6;
+}
+@keyframes da-cam-shake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25%       { transform: translate(-4px, 2px) rotate(-.3deg); }
+  75%       { transform: translate( 4px,-2px) rotate( .3deg); }
+}
+
+/* ─ Rarity atmosphere ─────────────────────────────────────────────── */
+.da-atmosphere {
+  position: absolute; inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.2s;
+}
+.da-phase-2 .da-atmosphere {
+  opacity: 1;
+  background: radial-gradient(ellipse at 50% 55%, var(--tg) 0%, transparent 55%);
+  mix-blend-mode: screen;
+}
+
+/* ─ Particles ─────────────────────────────────────────────────────── */
+.da-particles {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.da-particle {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: var(--ps); height: var(--ps);
+  margin-left: calc(var(--ps) / -2);
+  margin-top:  calc(var(--ps) / -2);
+  background: var(--pc);
+  border-radius: 50%;
+  box-shadow: 0 0 calc(var(--ps) * 2) var(--pc);
+  animation: da-particle-fly var(--pd) var(--pdelay) cubic-bezier(0,.9,.57,1) both;
+}
+.da-p-star {
+  border-radius: 0;
+  clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  box-shadow: none;
+  filter: drop-shadow(0 0 calc(var(--ps) * 1.5) var(--pc));
+}
+@keyframes da-particle-fly {
+  0%   { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+  100% { transform: translate(var(--tx), var(--ty)) scale(0) rotate(var(--pr)); opacity: 0; }
+}
+
+/* ─ Flash overlay ──────────────────────────────────────────────────── */
+.da-flash {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, #fff 0%, var(--tc) 35%, rgba(0,0,0,0) 70%);
+  opacity: 0;
+  pointer-events: none;
+}
+.da-flash-active {
+  animation: da-flash-pop .7s ease forwards;
+}
+@keyframes da-flash-pop {
+  0%  { opacity: 0; }
+  12% { opacity: 1; }
+  100%{ opacity: 0; }
+}
+
+/* ─ Card reveal stage ──────────────────────────────────────────────── */
+.da-cards-stage {
+  position: absolute; inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  background: rgba(0,0,0,.9);
+  backdrop-filter: blur(8px);
+  animation: da-fade-in .4s ease forwards;
+  overflow-y: auto;
+}
+
+.da-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  max-width: 720px;
+  width: 100%;
+}
+.da-single {
+  grid-template-columns: 1fr;
+  max-width: 230px;
+}
+
+/* ─ Individual card ────────────────────────────────────────────────── */
+.da-card {
+  aspect-ratio: 2/3;
+  border: 2px solid var(--rc);
+  border-radius: 10px;
+  background: linear-gradient(160deg, #0f1a2e 0%, #1a2840 60%, #0a1020 100%);
+  box-shadow: 0 0 18px var(--rg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3px; padding: 8px 5px;
+  position: relative; overflow: hidden;
+  animation: da-card-in .55s calc(var(--ci) * 55ms + .08s) cubic-bezier(.175,.885,.32,1.275) both;
+}
+@keyframes da-card-in {
+  from { opacity: 0; transform: scale(.35) translateY(70px) rotate(-12deg); }
+  to   { opacity: 1; transform: scale(1)   translateY(0)    rotate(0deg); }
+}
+
+/* Legendary card: golden pulse */
+.da-card.legendary {
+  box-shadow: 0 0 28px #FFA500, 0 0 56px #FFD700;
+  animation:
+    da-card-in .55s calc(var(--ci) * 55ms + .08s) cubic-bezier(.175,.885,.32,1.275) both,
+    da-legendary-card-pulse 2s 1.2s ease-in-out infinite;
+}
+@keyframes da-legendary-card-pulse {
+  0%, 100% { box-shadow: 0 0 22px #FFA500, 0 0 45px #FFD700; }
+  50%       { box-shadow: 0 0 55px #FFA500, 0 0 110px #FFD700, 0 0 160px #FF8C00; }
+}
+
+/* Epic card: purple pulse */
+.da-card.epic {
+  animation:
+    da-card-in .55s calc(var(--ci) * 55ms + .08s) cubic-bezier(.175,.885,.32,1.275) both,
+    da-epic-card-pulse 2.5s 1.2s ease-in-out infinite;
+}
+@keyframes da-epic-card-pulse {
+  0%, 100% { box-shadow: 0 0 16px var(--rg); }
+  50%       { box-shadow: 0 0 38px var(--rg), 0 0 75px var(--rg); }
+}
+
+/* Shine sweep on reveal */
+.da-card-shine {
+  position: absolute;
+  top: -50%; left: -60%;
+  width: 60%; height: 200%;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.12) 50%, transparent 60%);
+  transform: skewX(-15deg);
+  pointer-events: none;
+  animation: da-shine-sweep 1s calc(var(--ci) * 55ms + .6s) ease forwards;
+}
+@keyframes da-shine-sweep {
+  from { left: -60%; }
+  to   { left: 120%; }
+}
+
+/* ─ Card content ────────────────────────────────────────────────────── */
+.da-featured-badge {
+  position: absolute; top: 5px; right: 5px;
+  font-size: .52rem; font-weight: 800;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #000; padding: 2px 4px;
+  border-radius: 4px; letter-spacing: .03em;
+}
+.da-card-stars {
+  color: var(--rc); font-size: .62rem;
+  letter-spacing: -1px;
+  text-shadow: 0 0 6px var(--rg);
+}
+.da-card-pos {
+  font-size: .6rem; font-weight: 800;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 1px 6px; border-radius: 4px;
+}
+.da-card-name {
+  font-size: .82rem; font-weight: 800;
+  text-align: center; color: #fff;
+  text-shadow: 0 0 8px rgba(255,255,255,.3);
+  line-height: 1.2;
+}
+.da-card-club {
+  font-size: .58rem; color: rgba(255,255,255,.5);
+  text-align: center;
+}
+.da-card-ovr {
+  font-size: 1.45rem; font-weight: 900;
+  color: var(--rc);
+  text-shadow: 0 0 12px var(--rg);
+  line-height: 1;
+}
+.da-card-nation {
+  font-size: .58rem; color: rgba(255,255,255,.45);
+}
+.da-card-tier {
+  font-size: .65rem; font-weight: 700;
+  letter-spacing: .05em; margin-top: 1px;
+}
+
+/* Single card bigger */
+.da-single .da-card-name { font-size: 1.1rem; }
+.da-single .da-card-ovr  { font-size: 2rem;   }
+
+/* ─ Confirm button ──────────────────────────────────────────────────── */
+.da-confirm-wrap { display: flex; }
+.da-confirm-btn {
+  padding: 10px 40px;
+  background: linear-gradient(135deg, #1d4ed8, #4f46e5);
+  border: none; border-radius: 8px;
+  color: #fff; font-size: .95rem; font-weight: 600;
+  cursor: pointer; transition: filter .15s;
+}
+.da-confirm-btn:hover { filter: brightness(1.15); }
+
+/* ─ Skip button ─────────────────────────────────────────────────────── */
+.da-skip-btn {
+  position: absolute; top: 16px; right: 16px;
+  padding: 6px 18px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 6px;
+  color: rgba(255,255,255,.65);
+  font-size: .82rem; cursor: pointer;
+  transition: background .15s, color .15s;
+  z-index: 10;
+}
+.da-skip-btn:hover { background: rgba(255,255,255,.2); color: #fff; }
+
+/* ─ Legendary golden rain overlay ──────────────────────────────────── */
+.da-golden-rain {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.da-rain-drop {
+  position: absolute;
+  top: -20px;
+  width: var(--rw);
+  height: calc(var(--rw) * 3);
+  background: var(--rc);
+  border-radius: 50%;
+  opacity: .8;
+  animation: da-rain-fall var(--rd) var(--rdelay) linear infinite;
+  box-shadow: 0 0 calc(var(--rw) * 2) var(--rc);
+}
+@keyframes da-rain-fall {
+  from { transform: translateY(-20px) translateX(0); opacity: .9; }
+  to   { transform: translateY(110vh) translateX(var(--rx)); opacity: 0; }
+}
+
+/* ─ Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .da-cards-grid { grid-template-columns: repeat(5, 1fr); gap: 5px; }
+  .da-card-name  { font-size: .65rem; }
+  .da-card-ovr   { font-size: 1rem; }
+  .da-single .da-card-name { font-size: .65rem; }
+  .da-single .da-card-ovr  { font-size: 1rem; }
+  .da-tier-label { font-size: 1rem; letter-spacing: .08em; }
+  .da-confirm-btn { padding: 9px 28px; }
+}
